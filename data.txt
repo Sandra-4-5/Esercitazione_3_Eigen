@@ -1,0 +1,108 @@
+#include<iostream>
+#include<Eigen/Eigen>
+
+using namespace std;
+using namespace Eigen;
+
+int main(){
+    Matrix2d A1,  A2, A3;
+    A1 <<5.547001962252291e-01, -3.770900990025203e-02,
+        8.320502943378437e-01, -9.992887623566787e-01;
+    
+    A2 <<5.547001962252291e-01, -5.540607316466765e-01,
+         8.320502943378437e-01,-8.324762492991313e-01;
+
+    A3 <<5.547001962252291e-01, -5.547001955851905e-01,
+         8.320502943378437e-01, -8.320502947645361e-01;
+
+    Vector2d b1 ,b2 , b3, x_es ;
+    b1<<-5.169911863249772e-01,
+         1.672384680188350e-01; 
+
+     b2<<-6.394645785530173e-04,
+         4.259549612877223e-04;
+
+     b3<<-6.400391328043042e-10,
+          4.266924591433963e-10;
+
+     x_es<<1.0e+0,
+          -1.0e+00;
+
+    PartialPivLU<Matrix2d> lu(A1);
+    Matrix2d L1= lu.matrixL();
+    Matrix2d U1= lu.matrixU();
+    Matrix2d P1= lu.permutationP();
+
+
+    HouseholderQR<Matrix2d> qr(A1);
+    Matrix2d Q1 = qr.householderQ();
+    Matrix2d R1 = qr.matrixQR().triangularView<Upper>();
+
+
+   Vector2d Pb1=P1*b1;
+   Vector2d y1_Gauss= L1.solve(Pb1);
+   Vector2d x1_Gauss=U1.solve(y1_Gauss);
+   double err1_Gauss=(x1_gauss-x_es).norm()/x_es.norm();
+
+   Vector2d y1_qr=Q1.transpose()*b1;
+   Vector2d x1_qr=R1.solve(y1_qr);
+   double err1_qr=(x1_qr-x_es).norm()/x_es.norm();
+
+
+   PartialPivLU<Matrix2d> lu(A2);
+    Matrix2d L2= lu.matrixL();
+    Matrix2d U2= lu.matrixU();
+    Matrix2d P2= lu.permutationP();
+
+   HouseholderQR<Matrix2d> qr(A2);
+    Matrix2d Q2 = qr.householderQ();
+    Matrix2d R2 = qr.matrixQR().triangularView<Upper>();
+
+    Vector2d Pb2=P2*b2;
+    Vector2d y2_Gauss= L2.solve(Pb2);
+    Vector2d x2_Gauss=U2.solve(y2_Gauss);
+    double err2_Gauss=(x2_gauss-x_es).norm()/x_es.norm();
+ 
+    Vector2d y2_qr=Q2.transpose()*b2;
+    Vector2d x2_qr=R2.solve(y2_qr);
+    double err2_qr=(x2_qr-x_es).norm()/x_es.norm();
+
+
+
+
+    PartialPivLU<Matrix2d> lu(A3);
+    Matrix2d L3= lu.matrixL();
+    Matrix2d U3= lu.matrixU();
+    Matrix2d P3= lu.permutationP();
+
+    HouseholderQR<Matrix2d> qr(A3);
+    Matrix2d Q3 = qr.householderQ();
+    Matrix2d R3 = qr.matrixQR().triangularView<Upper>();
+
+    Vector2d Pb3=P3*b3;
+    Vector2d y3_Gauss= L3.solve(Pb3);
+    Vector2d x3_Gauss=U3.solve(y3_Gauss);
+    double err3_Gauss=(x3_gauss-x_es).norm()/x_es.norm();
+ 
+    Vector2d y3_qr=Q3.transpose()*b3;
+    Vector2d x3_qr=R3.solve(y3_qr);
+    double err2_qr=(x2_qr-x_es).norm()/x_es.norm();
+
+    return 0;
+}
+
+
+
+   
+ 
+
+
+          
+          
+
+
+        
+
+
+
+    
